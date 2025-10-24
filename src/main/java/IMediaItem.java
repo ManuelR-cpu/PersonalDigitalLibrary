@@ -31,4 +31,5 @@ public interface IMediaItem {
    * @return one of the types being movie or tv_series
    */
   public MediaType getMediaType();
+
 }

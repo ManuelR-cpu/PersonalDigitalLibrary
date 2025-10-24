@@ -1,9 +1,9 @@
 public class Movie implements IMediaItem {
-  private String title;
-  private int releaseYear;
-  private String genre;
-  private double rating;
-  private MediaType mediaType;
+  private final String title;
+  private final int releaseYear;
+  private final String genre;
+  private final double rating;
+  private final MediaType mediaType;
 
   Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType) {
     this.title = title;
@@ -42,4 +42,5 @@ public class Movie implements IMediaItem {
   public MediaType getMediaType() {
     return mediaType;
   }
+
 }
