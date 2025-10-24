@@ -1,7 +1,6 @@
 import java.util.List;
-import java.util.Scanner;
 
-public class LibraryController {
+public class LibraryController implements ControllerInterface {
   private final InterfaceLibrary library;
   private ViewInterface view;
   private boolean running;
@@ -12,6 +11,7 @@ public class LibraryController {
     this.running = true;
   }
 
+  @Override
   public void run() {
     while (running) {
 
@@ -55,11 +55,13 @@ public class LibraryController {
     }
   }
 
+  @Override
   public void setView(ViewInterface view) {
     this.view = view;
   }
 
-  public void deleteSelectedItem(String title){
+  @Override
+  public void deleteSelectedItem(String title) {
     boolean success = library.deleteItem(title);
 
     if (success) {
@@ -70,11 +72,23 @@ public class LibraryController {
     }
   }
 
-  public void refreshView() {
+  @Override
+  public void addNewItem(IMediaItem item) {
+    if (item != null) {
+      library.addItem(item);
+      view.showMessage("Item added to library successfully.");
+      refreshView();
+    } else {
+      view.showMessage("No item to add to library.");
+    }
+  }
+
+  private void refreshView() {
     List<IMediaItem> allItems = library.getAllItems();
     view.showAllItems(allItems);
   }
 
+  @Override
   public void initializeView() {
     refreshView();
   }

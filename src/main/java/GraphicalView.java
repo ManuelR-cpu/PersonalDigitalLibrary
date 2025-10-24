@@ -3,6 +3,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+
+import java.util.Optional;
 
 import java.util.List;
 
@@ -18,8 +23,6 @@ public class GraphicalView implements ViewInterface {
   public GraphicalView(LibraryController controller) {
     this.controller = controller;
     this.mainScene = initUI();
-
-    controller.initializeView();
   }
 
   public Scene getScene() {
@@ -42,14 +45,16 @@ public class GraphicalView implements ViewInterface {
     deleteButton = new Button("Delete Selected");
 
     addButton.setOnAction(event -> {
-      System.out.println("Add button clicked");
+      Optional<IMediaItem> result = showAddItemDialog();
+      result.ifPresent(newItem -> {
+        controller.addNewItem(newItem);
+      });
     });
     deleteButton.setOnAction(event -> {
       IMediaItem selectedItem = itemListView.getSelectionModel().getSelectedItem();
       if (selectedItem != null) {
         controller.deleteSelectedItem(selectedItem.getTitle());
-      }
-      else {
+      } else {
         System.out.println("Please select an item to delete.");
       }
     });
@@ -59,6 +64,84 @@ public class GraphicalView implements ViewInterface {
     root.setRight(buttonBox);
 
     return new Scene(root, 600, 400);
+  }
+
+  private Optional<IMediaItem> showAddItemDialog() {
+    Dialog<IMediaItem> dialog = new Dialog<>();
+    dialog.setTitle("Add New Media Item");
+    dialog.setHeaderText("Enter the details for the new item");
+
+    ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+    dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+    GridPane grid = new GridPane();
+    grid.setHgap(10);
+    grid.setVgap(10);
+    grid.setPadding(new Insets(20, 150, 10, 10));
+
+    ComboBox<MediaType> typeComboBox = new ComboBox<>();
+    typeComboBox.getItems().setAll(MediaType.MOVIE, MediaType.TV_SERIES);
+    typeComboBox.setValue(MediaType.MOVIE);
+
+    TextField titleField = new TextField();
+    titleField.setPromptText("Title");
+    TextField yearField = new TextField();
+    yearField.setPromptText("Year");
+    TextField genreField = new TextField();
+    genreField.setPromptText("Genre");
+    TextField ratingField = new TextField();
+    ratingField.setPromptText("Rating (1.0 - 10.0)");
+
+    Label episodeCountLabel = new Label("Episode Count");
+    TextField episodeCountField = new TextField();
+    episodeCountField.setPromptText("Episode Count");
+    episodeCountLabel.setVisible(false);
+    episodeCountField.setVisible(false);
+
+    typeComboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+      boolean isTVShow = (newValue == MediaType.TV_SERIES);
+      episodeCountLabel.setVisible(isTVShow);
+      episodeCountField.setVisible(isTVShow);
+    });
+
+    grid.add(new Label("Type:"), 0, 0);
+    grid.add(typeComboBox, 1, 0);
+    grid.add(new Label("Title:"), 0, 1);
+    grid.add(titleField, 1, 1);
+    grid.add(new Label("Year:"), 0, 2);
+    grid.add(yearField, 1, 2);
+    grid.add(new Label("Genre:"), 0, 3);
+    grid.add(genreField, 1, 3);
+    grid.add(new Label("Rating:"), 0, 4);
+    grid.add(ratingField, 1, 4);
+    grid.add(episodeCountLabel, 0, 5);
+    grid.add(episodeCountField, 1, 5);
+
+    dialog.getDialogPane().setContent(grid);
+
+    dialog.setResultConverter(dialogButton -> {
+      if (dialogButton == okButtonType) {
+        try {
+          String title = titleField.getText();
+          int year = Integer.parseInt(yearField.getText());
+          String genre = genreField.getText();
+          double rating = Double.parseDouble(ratingField.getText());
+          MediaType mediaType = typeComboBox.getValue();
+
+          if (mediaType == MediaType.MOVIE) {
+            return new Movie(title, year, genre, rating, mediaType);
+          } else {
+            int episodes = Integer.parseInt(episodeCountField.getText());
+            return new TVShow(title, year, genre, rating, mediaType, episodes);
+          }
+        } catch (NumberFormatException e) {
+          showMessage("Invalid input. Please check your numbers");
+          return null;
+        }
+      }
+      return null;
+    });
+    return dialog.showAndWait();
   }
 
   @Override
