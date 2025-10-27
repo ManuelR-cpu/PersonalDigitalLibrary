@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.Alert;
 
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class GraphicalView implements ViewInterface {
     root.setCenter(itemListView);
 
     addButton = new Button("Add Item");
-    deleteButton = new Button("Delete Selected");
+    deleteButton = new Button("Delete");
 
     addButton.setOnAction(event -> {
       Optional<IMediaItem> result = showAddItemDialog();
@@ -55,7 +56,7 @@ public class GraphicalView implements ViewInterface {
       if (selectedItem != null) {
         controller.deleteSelectedItem(selectedItem.getTitle());
       } else {
-        System.out.println("Please select an item to delete.");
+        showMessage("Please select an item to delete");
       }
     });
 
@@ -157,7 +158,12 @@ public class GraphicalView implements ViewInterface {
 
   @Override
   public void showMessage(String message) {
-    System.out.println("MESSAGE: " + message);
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Library Notification");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+
+    alert.showAndWait();
   }
 
   @Override

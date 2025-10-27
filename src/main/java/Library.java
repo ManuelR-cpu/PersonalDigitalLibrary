@@ -33,6 +33,18 @@ public class Library implements InterfaceLibrary {
     return this.items;
   }
 
+  @Override
+  public List<IMediaItem> getItemsByType(MediaType type) {
+    List<IMediaItem> filteredItems = new ArrayList<>();
+
+    for (IMediaItem item : this.items) {
+      if (item.getMediaType().equals(type)) {
+        filteredItems.add(item);
+      }
+    }
+    return filteredItems;
+  }
+
 
   @Override
   public List<IMediaItem> searchForItems(String title) {
