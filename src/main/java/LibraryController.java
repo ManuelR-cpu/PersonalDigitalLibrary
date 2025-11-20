@@ -2,61 +2,16 @@ import java.util.List;
 
 public class LibraryController implements ControllerInterface {
   private final InterfaceLibrary library;
-  private ViewInterface view;
-  private boolean running;
+  private IView view;
+  private Main sceneManager;
 
-  public LibraryController(Library library) {
+  public LibraryController(Library library, Main sceneManager) {
     this.library = library;
-    this.view = new LibraryView();
-    this.running = true;
+    this.sceneManager = sceneManager;
   }
 
   @Override
-  public void run() {
-    while (running) {
-
-      int choice = view.showMenuAndGetChoice();
-
-      switch (choice) {
-        case 1:
-          IMediaItem newItem = view.askForNewMediaItem();
-          if (newItem != null) {
-            library.addItem(newItem);
-            view.showMessage("Item added to library");
-          } else {
-            view.showMessage("No item added to library");
-          }
-          break;
-        case 2:
-          List<IMediaItem> allItems = library.getAllItems();
-          view.showAllItems(allItems);
-          break;
-        case 3:
-          String searchTitle = view.askForTitle("to search for");
-          List<IMediaItem> results = library.searchForItems(searchTitle);
-          view.showAllItems(results);
-          break;
-        case 4:
-          String deleteTitle = view.askForTitle("to delete");
-          boolean success = library.deleteItem(deleteTitle);
-          if (success) {
-            view.showMessage("Item deleted successfully");
-          } else {
-            view.showMessage("Item not deleted successfully");
-          }
-          break;
-        case 5:
-          running = false;
-          view.showMessage("Goodbye!");
-          break;
-        default:
-          view.showMessage("Invalid choice");
-      }
-    }
-  }
-
-  @Override
-  public void setView(ViewInterface view) {
+  public void setView(IView view) {
     this.view = view;
   }
 
@@ -91,5 +46,33 @@ public class LibraryController implements ControllerInterface {
   @Override
   public void initializeView() {
     refreshView();
+  }
+
+  @Override
+  public void requestAllItemsView() {
+    List<IMediaItem> allItems = library.getAllItems();
+    sceneManager.showLibraryView(allItems);
+  }
+
+  @Override
+  public void requestMoviesView() {
+    List<IMediaItem> movies = library.getItemsByType(MediaType.MOVIE);
+    sceneManager.showLibraryView(movies);
+  }
+
+  @Override
+  public void requestTVShowsView() {
+    List<IMediaItem> shows = library.getItemsByType(MediaType.TV_SERIES);
+    sceneManager.showLibraryView(shows);
+  }
+
+  @Override
+  public void requestMainMenu() {
+    sceneManager.showMainMenu();
+  }
+
+  @Override
+  public void requestExit() {
+    sceneManager.exitApp();
   }
 }

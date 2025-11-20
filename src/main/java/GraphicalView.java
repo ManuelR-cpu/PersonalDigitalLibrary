@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import java.util.List;
 
-public class GraphicalView implements ViewInterface {
+public class GraphicalView implements IView {
 
   private final LibraryController controller;
   private final Scene mainScene;
@@ -146,11 +146,6 @@ public class GraphicalView implements ViewInterface {
   }
 
   @Override
-  public int showMenuAndGetChoice() {
-    return 0;
-  }
-
-  @Override
   public void showAllItems(List<IMediaItem> items) {
     itemListView.getItems().clear();
     itemListView.getItems().addAll(items);
@@ -164,15 +159,5 @@ public class GraphicalView implements ViewInterface {
     alert.setContentText(message);
 
     alert.showAndWait();
-  }
-
-  @Override
-  public String askForTitle(String purpose) {
-    return null;
-  }
-
-  @Override
-  public IMediaItem askForNewMediaItem() {
-    return null;
   }
 }

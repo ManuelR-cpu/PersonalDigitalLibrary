@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.Scanner;
 
-public class LibraryView implements ViewInterface {
+public class LibraryView implements IConsoleView {
 
   private final Scanner input;
 
