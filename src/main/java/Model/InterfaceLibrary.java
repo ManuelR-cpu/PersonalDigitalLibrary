@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.List;
 
 public interface InterfaceLibrary {
@@ -5,7 +7,7 @@ public interface InterfaceLibrary {
   /**
    * Adds a media item to the library.
    *
-   * @param item either a Movie or TVShow.
+   * @param item either a Model.Movie or Model.TVShow.
    */
   void addItem(IMediaItem item);
 

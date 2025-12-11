@@ -1,15 +1,17 @@
+package View;
+
+import Controller.ControllerInterface;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class MainMenuView {
-  private final LibraryController controller;
+  private final ControllerInterface controller;
   private final Scene menuScene;
 
-  public MainMenuView(LibraryController controller) {
+  public MainMenuView(ControllerInterface controller) {
     this.controller = controller;
     this.menuScene = initUI();
   }
@@ -36,19 +38,19 @@ public class MainMenuView {
     exitButton.setPrefSize(200, 50);
 
     viewAllButton.setOnAction(event -> {
-      System.out.println("Viewing All Library");
+      controller.requestAllItemsView();
     });
 
     viewMoviesButton.setOnAction(event -> {
-      System.out.println("Viewing Movies");
+      controller.requestMoviesView();
     });
 
     viewTVShowsButton.setOnAction(event -> {
-      System.out.println("Viewing TV Shows");
+      controller.requestTVShowsView();
     });
 
     exitButton.setOnAction(event -> {
-      System.out.println("Exiting Application");
+      controller.requestExit();
     });
 
     root.getChildren().addAll(viewAllButton, viewMoviesButton, viewTVShowsButton, exitButton);

@@ -1,3 +1,12 @@
+package View;
+
+import Controller.ControllerInterface;
+import Controller.LibraryController;
+import Model.IMediaItem;
+import Model.MediaType;
+import Model.Movie;
+import Model.TVShow;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -7,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.HBox;
 
 import java.util.Optional;
 
@@ -14,14 +24,12 @@ import java.util.List;
 
 public class GraphicalView implements IView {
 
-  private final LibraryController controller;
+  private final ControllerInterface controller;
   private final Scene mainScene;
 
   private ListView<IMediaItem> itemListView;
-  private Button addButton;
-  private Button deleteButton;
 
-  public GraphicalView(LibraryController controller) {
+  public GraphicalView(ControllerInterface controller) {
     this.controller = controller;
     this.mainScene = initUI();
   }
@@ -42,14 +50,15 @@ public class GraphicalView implements IView {
             });
     root.setCenter(itemListView);
 
-    addButton = new Button("Add Item");
-    deleteButton = new Button("Delete");
+    Button addButton = new Button("Add Item");
+    Button deleteButton = new Button("Delete");
 
     addButton.setOnAction(event -> {
       Optional<IMediaItem> result = showAddItemDialog();
       result.ifPresent(newItem -> {
         controller.addNewItem(newItem);
       });
+
     });
     deleteButton.setOnAction(event -> {
       IMediaItem selectedItem = itemListView.getSelectionModel().getSelectedItem();
@@ -63,6 +72,26 @@ public class GraphicalView implements IView {
     VBox buttonBox = new VBox(10);
     buttonBox.getChildren().addAll(addButton, deleteButton);
     root.setRight(buttonBox);
+
+    HBox topBar = new HBox();
+    topBar.setPadding(new Insets(10, 10, 10, 10));
+    topBar.setSpacing(10);
+
+    TextField searchField = new TextField();
+    searchField.setPromptText("Search");
+
+    Button searchButton = new Button("Search");
+    searchButton.setOnAction(event -> {
+      String searchText = searchField.getText();
+      controller.requestSearch(searchText);
+    });
+
+    Button backButton = new Button("Back To Main Menu");
+    backButton.setOnAction(event -> {controller.requestMainMenu();});
+
+    topBar.getChildren().addAll(backButton, searchField, searchButton);
+    topBar.setAlignment(Pos.CENTER_LEFT);
+    root.setTop(topBar);
 
     return new Scene(root, 600, 400);
   }
@@ -154,10 +183,15 @@ public class GraphicalView implements IView {
   @Override
   public void showMessage(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Library Notification");
+    alert.setTitle("Model.Library Notification");
     alert.setHeaderText(null);
     alert.setContentText(message);
 
     alert.showAndWait();
+  }
+
+  public void updateList(List<IMediaItem> items) {
+    itemListView.getItems().clear();
+    itemListView.getItems().addAll(items);
   }
 }

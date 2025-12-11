@@ -1,3 +1,8 @@
+import Model.IMediaItem;
+import Model.Library;
+import View.IConsoleView;
+import View.LibraryView;
+
 import java.util.List;
 
 public class ConsoleApp {
@@ -16,9 +21,9 @@ public class ConsoleApp {
           IMediaItem newItem = view.askForNewMediaItem();
           if (newItem != null) {
             myLibrary.addItem(newItem);
-            view.showMessage("Item added to Library");
+            view.showMessage("Item added to Model.Library");
           } else {
-            view.showMessage("No item added to Library");
+            view.showMessage("No item added to Model.Library");
           }
           break;
         case 2:

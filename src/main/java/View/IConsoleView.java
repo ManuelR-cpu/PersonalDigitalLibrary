@@ -1,3 +1,7 @@
+package View;
+
+import Model.IMediaItem;
+
 import java.util.List;
 
 public interface IConsoleView extends IView {

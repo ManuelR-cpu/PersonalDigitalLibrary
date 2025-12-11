@@ -1,12 +1,20 @@
+package App;
+
+import Controller.ControllerInterface;
+import Controller.LibraryController;
+import Model.IMediaItem;
+import Model.InterfaceLibrary;
+import Model.Library;
+import View.GraphicalView;
+import View.MainMenuView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class Main extends Application {
-
   private Stage primaryStage;
-  private LibraryController controller;
+  private ControllerInterface controller;
   private MainMenuView mainMenuView;
   private GraphicalView guiView;
 
@@ -14,15 +22,14 @@ public class Main extends Application {
   public void start(Stage primaryStage) throws Exception {
     this.primaryStage = primaryStage;
 
-    Library myLibrary = new Library();
+    InterfaceLibrary myLibrary = new Library();
 
-    LibraryController controller = new LibraryController(myLibrary, this);
+    this.controller = new LibraryController(myLibrary,this);
 
     this.mainMenuView = new MainMenuView(controller);
     this.guiView = new GraphicalView(controller);
 
     primaryStage.setTitle("My Digital Library");
-
     showMainMenu();
   }
 
@@ -40,7 +47,10 @@ public class Main extends Application {
     primaryStage.show();
   }
 
-  public void
+  public void exitApp() {
+    primaryStage.close();
+  }
+
   public static void main(String[] args) {
     launch(args);
   }

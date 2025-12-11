@@ -1,3 +1,5 @@
+package Model;
+
 /**
  * Represents a MediaItem.
  */

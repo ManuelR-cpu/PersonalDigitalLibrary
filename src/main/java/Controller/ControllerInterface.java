@@ -1,3 +1,8 @@
+package Controller;
+
+import Model.IMediaItem;
+import View.IView;
+
 public interface ControllerInterface {
   /**
    * Sets which view class for the controller to use.
@@ -49,4 +54,10 @@ public interface ControllerInterface {
    * Request from the scene manager to exit the application completely.
    */
   void requestExit();
+
+  /**
+   * Searches for items matching the title and updates view
+   * @param title
+   */
+  void requestSearch(String title);
 }

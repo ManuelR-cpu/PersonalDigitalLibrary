@@ -1,3 +1,5 @@
+package Model;
+
 public class Movie implements IMediaItem {
   private final String title;
   private final int releaseYear;
@@ -5,7 +7,7 @@ public class Movie implements IMediaItem {
   private final double rating;
   private final MediaType mediaType;
 
-  Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType) {
+  public Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType) {
     this.title = title;
     this.releaseYear = releaseYear;
     this.genre = genre;

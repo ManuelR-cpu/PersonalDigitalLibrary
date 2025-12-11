@@ -1,11 +1,19 @@
+package Controller;
+
+import Model.IMediaItem;
+import Model.InterfaceLibrary;
+import Model.MediaType;
+import View.IView;
+import App.Main;
+
 import java.util.List;
 
 public class LibraryController implements ControllerInterface {
   private final InterfaceLibrary library;
   private IView view;
-  private Main sceneManager;
+  private final Main sceneManager;
 
-  public LibraryController(Library library, Main sceneManager) {
+  public LibraryController(InterfaceLibrary library, Main sceneManager) {
     this.library = library;
     this.sceneManager = sceneManager;
   }
@@ -74,5 +82,14 @@ public class LibraryController implements ControllerInterface {
   @Override
   public void requestExit() {
     sceneManager.exitApp();
+  }
+
+  @Override
+  public void requestSearch(String title) {
+    List<IMediaItem> results = library.searchForItems(title);
+    sceneManager.showLibraryView(results);
+    if (results.isEmpty()) {
+      view.showMessage("No items found with " + title + ".");
+    }
   }
 }

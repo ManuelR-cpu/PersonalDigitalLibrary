@@ -1,3 +1,5 @@
+package Model;
+
 public class TVShow implements IMediaItem {
   private String title;
   private int releaseYear;
@@ -6,7 +8,7 @@ public class TVShow implements IMediaItem {
   private int episodeCount;
   private MediaType mediaType;
 
-  TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType ,int episodeCount) {
+  public TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType ,int episodeCount) {
     this.title = title;
     this.releaseYear = releaseYear;
     this.genre = genre;

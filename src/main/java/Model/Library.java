@@ -1,3 +1,5 @@
+package Model;
+
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -5,7 +7,7 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 /**
- * Library that manages all the media that is inputted into the catalog.
+ * A library implementation that manages the inputted media in the catalog.
  */
 public class Library implements InterfaceLibrary {
   private final List<IMediaItem> items;
