@@ -63,7 +63,16 @@ public class GraphicalView implements IView {
     deleteButton.setOnAction(event -> {
       IMediaItem selectedItem = itemListView.getSelectionModel().getSelectedItem();
       if (selectedItem != null) {
-        controller.deleteSelectedItem(selectedItem.getTitle());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this item?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+          controller.deleteSelectedItem(selectedItem.getTitle());
+        }
       } else {
         showMessage("Please select an item to delete");
       }
@@ -87,7 +96,9 @@ public class GraphicalView implements IView {
     });
 
     Button backButton = new Button("Back To Main Menu");
-    backButton.setOnAction(event -> {controller.requestMainMenu();});
+    backButton.setOnAction(event -> {
+      controller.requestMainMenu();
+    });
 
     topBar.getChildren().addAll(backButton, searchField, searchButton);
     topBar.setAlignment(Pos.CENTER_LEFT);
