@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 import java.util.List;
@@ -42,6 +43,38 @@ public class GraphicalView implements IView {
     BorderPane root = new BorderPane();
 
     itemListView = new ListView<>();
+    Label emptyLabel = new Label("No items in library");
+    emptyLabel.setStyle("\"-fx-text-fill: gray; -fx-font-size: 14px;\"");
+    itemListView.setPlaceholder(emptyLabel);
+
+    itemListView.setCellFactory(param -> new ListCell<IMediaItem>() {
+      @Override
+      protected void updateItem(IMediaItem item, boolean empty) {
+        super.updateItem(item, empty);
+
+        if (empty || item == null) {
+          setText(null);
+          setGraphic(null);
+        } else {
+          VBox container = new VBox(3); // 3px spacing between lines
+
+          // Bolds title/year
+          String typeStr = (item.getMediaType() == MediaType.MOVIE) ? "[Movie]" : "[TV]";
+          Label titleLabel = new Label(typeStr + " " + item.getTitle() + " (" + item.getReleaseYear() + ")");
+          titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+          //Line for details on the items
+          Label detailsLabel = new Label("Genre: " + item.getGenre() + " | Rating: " + item.getRating() + "/10");
+          detailsLabel.setStyle("-fx-text-fill: #555555;"); // Dark gray color
+
+          container.getChildren().addAll(titleLabel, detailsLabel);
+
+          setText(null);
+          setGraphic(container);
+        }
+      }
+    });
+
     itemListView.getSelectionModel().selectedItemProperty().addListener(
             (obs, oldValue, newValue) -> {
               if (newValue != null) {
@@ -100,7 +133,33 @@ public class GraphicalView implements IView {
       controller.requestMainMenu();
     });
 
-    topBar.getChildren().addAll(backButton, searchField, searchButton);
+    ComboBox<String> sortBox = new ComboBox<>();
+    sortBox.getItems().addAll("Sort by Title", "Sort by Year", "Sort by Rating");
+    sortBox.setPromptText("Sort By...");
+
+    sortBox.setOnAction(event -> {
+      String criteria = sortBox.getValue();
+      if (criteria == null) return;
+
+      switch (criteria) {
+        case "Sort by Title":
+          // Sort A-Z
+          itemListView.getItems().sort(Comparator.comparing(IMediaItem::getTitle));
+          break;
+        case "Sort by Year":
+          // Sort Newest First (b - a)
+          itemListView.getItems().sort((item1, item2) ->
+                  Integer.compare(item2.getReleaseYear(), item1.getReleaseYear()));
+          break;
+        case "Sort by Rating":
+          // Sort Highest Rated First (b - a)
+          itemListView.getItems().sort((item1, item2) ->
+                  Double.compare(item2.getRating(), item1.getRating()));
+          break;
+      }
+    });
+
+    topBar.getChildren().addAll(backButton, searchField, searchButton, sortBox);
     topBar.setAlignment(Pos.CENTER_LEFT);
     root.setTop(topBar);
 
