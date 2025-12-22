@@ -1,4 +1,4 @@
-import Model.IMediaItem;
+import Model.domain.IMediaItem;
 import Model.Library;
 import View.IConsoleView;
 import View.LibraryView;

@@ -1,19 +1,21 @@
 package Controller;
 
-import Model.IMediaItem;
+import Model.domain.IMediaItem;
 import Model.InterfaceLibrary;
-import Model.MediaType;
+import Model.domain.MediaType;
+import Model.service.LibraryService;
 import View.IView;
 import App.Main;
 
 import java.util.List;
+import java.util.UUID;
 
 public class LibraryController implements ControllerInterface {
-  private final InterfaceLibrary library;
+  private final LibraryService library;
   private IView view;
   private final Main sceneManager;
 
-  public LibraryController(InterfaceLibrary library, Main sceneManager) {
+  public LibraryController(LibraryService library, Main sceneManager) {
     this.library = library;
     this.sceneManager = sceneManager;
   }
@@ -24,8 +26,8 @@ public class LibraryController implements ControllerInterface {
   }
 
   @Override
-  public void deleteSelectedItem(String title) {
-    boolean success = library.deleteItem(title);
+  public void deleteSelectedItem(UUID selectedItemId) {
+    boolean success = library.deleteItem(selectedItemId);
 
     if (success) {
       view.showMessage("Item deleted successfully.");

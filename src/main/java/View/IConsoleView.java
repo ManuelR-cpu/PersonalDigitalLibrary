@@ -1,6 +1,6 @@
 package View;
 
-import Model.IMediaItem;
+import Model.domain.IMediaItem;
 
 import java.util.List;
 

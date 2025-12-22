@@ -1,9 +1,9 @@
 package View;
 
-import Model.IMediaItem;
-import Model.MediaType;
-import Model.Movie;
-import Model.TVShow;
+import Model.domain.IMediaItem;
+import Model.domain.MediaType;
+import Model.domain.Movie;
+import Model.domain.TVShow;
 
 import java.util.List;
 import java.util.Scanner;
@@ -19,10 +19,10 @@ public class LibraryView implements IConsoleView {
   @Override
   public int showMenuAndGetChoice() {
     System.out.println("Options:");
-    System.out.println("1. Add a new Model.Movie/Model.TVShow");
+    System.out.println("1. Add a new Model.domain.Movie/Model.domain.TVShow");
     System.out.println("2. View entire library");
-    System.out.println("3. Search for Model.Movie/Model.TVShow");
-    System.out.println("4. Delete Model.Movie/Model.TVShow");
+    System.out.println("3. Search for Model.domain.Movie/Model.domain.TVShow");
+    System.out.println("4. Delete Model.domain.Movie/Model.domain.TVShow");
     System.out.println("5. Exit");
     System.out.print("Enter your choice: ");
     int choice = input.nextInt();
@@ -73,10 +73,10 @@ public class LibraryView implements IConsoleView {
     System.out.print("Enter media type: ");
     String mediaType = input.nextLine();
 
-    if (mediaType.equalsIgnoreCase("Model.Movie")) {
+    if (mediaType.equalsIgnoreCase("Model.domain.Movie")) {
       IMediaItem newItem = new Movie(title, year, genre, rating, MediaType.MOVIE);
       return newItem;
-    } else if (mediaType.equalsIgnoreCase("Model.TVShow")) {
+    } else if (mediaType.equalsIgnoreCase("Model.domain.TVShow")) {
       System.out.print("Enter episode count: ");
       int episodeCount = input.nextInt();
       input.nextLine();
