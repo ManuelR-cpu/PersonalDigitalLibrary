@@ -1,7 +1,8 @@
 package Controller;
 
-import Model.IMediaItem;
+import Model.domain.IMediaItem;
 import View.IView;
+import java.util.UUID;
 
 public interface ControllerInterface {
   /**
@@ -14,9 +15,9 @@ public interface ControllerInterface {
   /**
    * From the library it gets the item to be deleted.
    *
-   * @param title name of the item to be deleted.
+   * @param selectedItemId uuid of the item to be deleted.
    */
-  void deleteSelectedItem(String title);
+  void deleteSelectedItem(UUID selectedItemId);
 
   /**
    * Adds item to the list for the view.

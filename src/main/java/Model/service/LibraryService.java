@@ -1,11 +1,11 @@
-package Model;
+package Model.service;
 
 import Model.domain.IMediaItem;
 import Model.domain.MediaType;
 import java.util.List;
+import java.util.UUID;
 
-public interface InterfaceLibrary {
-
+public interface LibraryService {
   /**
    * Adds a media item to the library.
    *
@@ -36,8 +36,8 @@ public interface InterfaceLibrary {
   /**
    * Deletes specified items off the library.
    *
-   * @param title title of the media item to be
+   * @param uuid uuid of the media item to be deleted
    * @return returns true if the item was successfully deleted, false if the media item was not found.
    */
-  boolean deleteItem(String title);
+  boolean deleteItem(UUID uuid);
 }

@@ -1,5 +1,9 @@
 package Model;
 
+import Model.domain.IMediaItem;
+import Model.domain.MediaType;
+import Model.domain.Movie;
+import Model.domain.TVShow;
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -53,7 +57,7 @@ public class Library implements InterfaceLibrary {
     ArrayList<IMediaItem> foundItems = new ArrayList<>();
 
     for (IMediaItem item : this.items) {
-      if (item.getTitle().equalsIgnoreCase(title)) {
+      if (item.getTitle().toLowerCase().contains(title.toLowerCase())) {
         foundItems.add(item);
       }
     }
@@ -84,6 +88,7 @@ public class Library implements InterfaceLibrary {
     try (Writer writer = new FileWriter(LIBRARY_FILE_NAME)) {
       gson.toJson(libraryData, writer);
     } catch (IOException e) {
+      System.err.println("Failed to save library file.");
     }
   }
 
@@ -102,7 +107,9 @@ public class Library implements InterfaceLibrary {
         return combinedList;
       }
     } catch (FileNotFoundException e) {
+      System.err.println("File not foundz.");
     } catch (IOException e) {
+      System.err.println("Failed to save library file.");
     }
     return new ArrayList<>();
   }

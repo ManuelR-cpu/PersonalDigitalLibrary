@@ -1,11 +1,10 @@
 package View;
 
 import Controller.ControllerInterface;
-import Controller.LibraryController;
-import Model.IMediaItem;
-import Model.MediaType;
-import Model.Movie;
-import Model.TVShow;
+import Model.domain.IMediaItem;
+import Model.domain.MediaType;
+import Model.domain.Movie;
+import Model.domain.TVShow;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,7 +26,6 @@ public class GraphicalView implements IView {
 
   private final ControllerInterface controller;
   private final Scene mainScene;
-
   private ListView<IMediaItem> itemListView;
 
   public GraphicalView(ControllerInterface controller) {
@@ -58,14 +56,14 @@ public class GraphicalView implements IView {
         } else {
           VBox container = new VBox(3); // 3px spacing between lines
 
-          // Bolds title/year
+          // bolds title/year
           String typeStr = (item.getMediaType() == MediaType.MOVIE) ? "[Movie]" : "[TV]";
           Label titleLabel = new Label(typeStr + " " + item.getTitle() + " (" + item.getReleaseYear() + ")");
           titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-          //Line for details on the items
+          // line for details on the items
           Label detailsLabel = new Label("Genre: " + item.getGenre() + " | Rating: " + item.getRating() + "/10");
-          detailsLabel.setStyle("-fx-text-fill: #555555;"); // Dark gray color
+          detailsLabel.setStyle("-fx-text-fill: #555555;"); // dark gray color
 
           container.getChildren().addAll(titleLabel, detailsLabel);
 
@@ -78,7 +76,7 @@ public class GraphicalView implements IView {
     itemListView.getSelectionModel().selectedItemProperty().addListener(
             (obs, oldValue, newValue) -> {
               if (newValue != null) {
-                System.out.println("Clicked on" + newValue.getTitle());
+                System.out.println("Clicked on " + newValue.getTitle());
               }
             });
     root.setCenter(itemListView);
@@ -104,7 +102,7 @@ public class GraphicalView implements IView {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-          controller.deleteSelectedItem(selectedItem.getTitle());
+          controller.deleteSelectedItem(selectedItem.getId());
         }
       } else {
         showMessage("Please select an item to delete");

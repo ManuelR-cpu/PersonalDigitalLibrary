@@ -1,9 +1,18 @@
-package Model;
+package Model.domain;
+
+import java.util.UUID;
 
 /**
  * Represents a MediaItem.
  */
 public interface IMediaItem {
+  /**
+   * Gets the UUID of an item.
+   *
+   * @return the UUID of an item.
+   */
+  UUID getId();
+
   /**
    * Gets the title of a mediaItem.
    *
@@ -35,8 +44,7 @@ public interface IMediaItem {
   /**
    * Gets the media of an item.
    *
-   * @return one of the types being movie or tv_series
+   * @return one of the types being MOVIE or TV_SERIES
    */
   MediaType getMediaType();
-
 }

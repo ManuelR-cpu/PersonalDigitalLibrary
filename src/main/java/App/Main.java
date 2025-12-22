@@ -2,9 +2,14 @@ package App;
 
 import Controller.ControllerInterface;
 import Controller.LibraryController;
-import Model.IMediaItem;
+import Model.domain.IMediaItem;
 import Model.InterfaceLibrary;
 import Model.Library;
+import Model.repository.DataSourceFactory;
+import Model.repository.MediaRepository;
+import Model.repository.SqlMediaRepository;
+import Model.service.LibraryService;
+import Model.service.MediaLibraryService;
 import View.GraphicalView;
 import View.MainMenuView;
 import javafx.application.Application;
@@ -22,7 +27,9 @@ public class Main extends Application {
   public void start(Stage primaryStage) throws Exception {
     this.primaryStage = primaryStage;
 
-    InterfaceLibrary myLibrary = new Library();
+    var ds = DataSourceFactory.createDataSource();
+    MediaRepository mediaRepository = new SqlMediaRepository(ds);
+    LibraryService myLibrary = new MediaLibraryService(mediaRepository);
 
     this.controller = new LibraryController(myLibrary,this);
 
