@@ -37,7 +37,10 @@ public interface LibraryService {
    * Deletes specified items off the library.
    *
    * @param uuid uuid of the media item to be deleted
+   * @param type type of the media item to be deleted
    * @return returns true if the item was successfully deleted, false if the media item was not found.
    */
-  boolean deleteItem(UUID uuid);
+  boolean deleteItem(UUID uuid, MediaType type);
+
+  void modifyItem(UUID uuid, IMediaItem item);
 }

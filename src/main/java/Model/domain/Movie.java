@@ -2,32 +2,22 @@ package Model.domain;
 
 import java.util.UUID;
 
-public class Movie implements IMediaItem {
-  private final UUID id;
-  private final String title;
-  private final int releaseYear;
-  private final String genre;
-  private final double rating;
-  private final MediaType mediaType;
+public class Movie extends AbstractMediaItem {
+  private final String director;
+  private final int duration;
 
   // for constructing new Movie objects
-  public Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType) {
-    this.id = UUID.randomUUID();
-    this.title = title;
-    this.releaseYear = releaseYear;
-    this.genre = genre;
-    this.rating = rating;
-    this.mediaType = mediaType;
+  public Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType,  String director, int duration) {
+    super(title, releaseYear, genre, rating, mediaType);
+    this.director = director;
+    this.duration = duration;
   }
 
   // for constructing Movie objects already in the database
-  public Movie(UUID id, String title, int releaseYear, String genre, double rating, MediaType mediaType) {
-    this.id = id;
-    this.title = title;
-    this.releaseYear = releaseYear;
-    this.genre = genre;
-    this.rating = rating;
-    this.mediaType = mediaType;
+  public Movie(UUID id, String title, int releaseYear, String genre, double rating, MediaType mediaType, String director, int duration) {
+    super(id, title, releaseYear, genre, rating,  mediaType);
+    this.director = director;
+    this.duration = duration;
   }
 
   @Override
@@ -35,46 +25,11 @@ public class Movie implements IMediaItem {
     return String.format("%s (%d) - Genre: %s, Rating: %.1f/10.0", title, releaseYear, genre, rating);
   }
 
-  @Override
-  public UUID getId() {
-    return id;
+  public String getDirector() {
+    return director;
   }
 
-  @Override
-  public String getTitle() {
-    return title;
-  }
-
-  @Override
-  public int getReleaseYear() {
-    return releaseYear;
-  }
-
-  @Override
-  public String getGenre() {
-    return genre;
-  }
-
-  @Override
-  public double getRating() {
-    return rating;
-  }
-
-  @Override
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    IMediaItem that = (IMediaItem) o;
-    return id.equals(that.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    return id.hashCode();
+  public int getDuration() {
+    return duration;
   }
 }

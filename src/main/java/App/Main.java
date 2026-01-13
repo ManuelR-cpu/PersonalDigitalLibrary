@@ -3,8 +3,6 @@ package App;
 import Controller.ControllerInterface;
 import Controller.LibraryController;
 import Model.domain.IMediaItem;
-import Model.InterfaceLibrary;
-import Model.Library;
 import Model.repository.DataSourceFactory;
 import Model.repository.MediaRepository;
 import Model.repository.SqlMediaRepository;

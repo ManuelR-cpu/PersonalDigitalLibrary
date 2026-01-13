@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.domain.IMediaItem;
-import Model.InterfaceLibrary;
 import Model.domain.MediaType;
 import Model.service.LibraryService;
 import View.IView;
@@ -26,8 +25,8 @@ public class LibraryController implements ControllerInterface {
   }
 
   @Override
-  public void deleteSelectedItem(UUID selectedItemId) {
-    boolean success = library.deleteItem(selectedItemId);
+  public void deleteSelectedItem(UUID selectedItemId, MediaType selectedItemType) {
+    boolean success = library.deleteItem(selectedItemId, selectedItemType);
 
     if (success) {
       view.showMessage("Item deleted successfully.");
@@ -45,6 +44,15 @@ public class LibraryController implements ControllerInterface {
       refreshView();
     } else {
       view.showMessage("No item to add to library.");
+    }
+  }
+
+  @Override
+  public void updateItem(UUID uuid, IMediaItem item) {
+    if (item != null) {
+      library.modifyItem(uuid, item);
+    } else {
+      view.showMessage("No item to update.");
     }
   }
 
