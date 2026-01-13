@@ -2,6 +2,8 @@ package Model.service;
 
 import Model.domain.IMediaItem;
 import Model.domain.MediaType;
+import Model.domain.Movie;
+import Model.domain.TVShow;
 import Model.repository.MediaRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,11 @@ public class MediaLibraryService implements LibraryService {
 
   @Override
   public void addItem(IMediaItem item) {
-    mediaRepository.save(item);
+    if (item instanceof Movie) {
+      mediaRepository.createMovie((Movie) item);
+    } else {
+      mediaRepository.createTVShow((TVShow) item);
+    }
   }
 
   @Override
@@ -28,7 +34,9 @@ public class MediaLibraryService implements LibraryService {
   @Override
   public List<IMediaItem> getItemsByType(MediaType type) {
     List<IMediaItem> filteredItems = new ArrayList<>();
-    // make one db query here instead of calling findAll() in loop
+    // made one db query here instead of calling findAll() in loop
+    // as to not flood unnecessary requests to db each loop.
+    // A good future change may be to implement filter logic in the query itself
     List<IMediaItem> allItems = mediaRepository.findAll();
 
     for (IMediaItem item : allItems) {
@@ -47,7 +55,6 @@ public class MediaLibraryService implements LibraryService {
     }
 
     List<IMediaItem> foundItems = new ArrayList<>();
-    // make one db query here instead of calling findAll() in loop
     List<IMediaItem> allItems = mediaRepository.findAll();
 
     for (IMediaItem item : allItems) {
@@ -60,7 +67,16 @@ public class MediaLibraryService implements LibraryService {
   }
 
   @Override
-  public boolean deleteItem(UUID uuid) {
-    return mediaRepository.delete(uuid);
+  public boolean deleteItem(UUID uuid, MediaType type) {
+    return mediaRepository.delete(uuid, type);
+  }
+
+  @Override
+  public void modifyItem(UUID uuid, IMediaItem item) {
+    if (item instanceof Movie) {
+      mediaRepository.updateMovie((Movie) item);
+    } else  {
+      mediaRepository.updateTVShow((TVShow) item);
+    }
   }
 }

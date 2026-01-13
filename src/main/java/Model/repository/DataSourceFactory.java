@@ -14,6 +14,7 @@ public class DataSourceFactory {
     config.setJdbcUrl("jdbc:postgresql://localhost:5432/media_items");
     config.setUsername(user);
     config.setPassword(password);
+
     return new HikariDataSource(config);
   }
 }

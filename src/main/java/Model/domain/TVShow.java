@@ -1,36 +1,28 @@
 package Model.domain;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class TVShow implements IMediaItem {
-  private final UUID id;
-  private String title;
-  private int releaseYear;
-  private String genre;
-  private double rating;
+public class TVShow extends AbstractMediaItem {
   private Integer episodeCount;
-  private MediaType mediaType;
+  private Integer seasonCount;
+  private Map<Integer, Double> seasonRatings;
 
   // for constructing new Movie objects
-  public TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount) {
-    this.id = UUID.randomUUID();
-    this.title = title;
-    this.releaseYear = releaseYear;
-    this.genre = genre;
-    this.rating = rating;
-    this.mediaType = mediaType;
+  public TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount,  Integer seasonCount) {
+    super(title, releaseYear, genre, rating,  mediaType);
     this.episodeCount = episodeCount;
+    this.seasonCount = seasonCount;
+    this.seasonRatings = new HashMap<>();
   }
 
   // for constructing TVShow objects already in the database
-  public TVShow(UUID id, String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount) {
-    this.id = id;
-    this.title = title;
-    this.releaseYear = releaseYear;
-    this.genre = genre;
-    this.rating = rating;
-    this.mediaType = mediaType;
+  public TVShow(UUID id, String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount, Integer seasonCount, Map<Integer, Double> seasonRatings) {
+    super(id, title, releaseYear, genre, rating, mediaType);
     this.episodeCount = episodeCount;
+    this.seasonCount = seasonCount;
+    this.seasonRatings = seasonRatings;
   }
 
   @Override
@@ -38,50 +30,15 @@ public class TVShow implements IMediaItem {
     return String.format("%s (%d) - Genre: %s, Rating: %.1f/10.0, episodeCount: %d", title, releaseYear, genre, rating, episodeCount);
   }
 
-  @Override
-  public UUID getId() {
-    return id;
-  }
-
-  @Override
-  public String getTitle() {
-    return title;
-  }
-
-  @Override
-  public int getReleaseYear() {
-    return releaseYear;
-  }
-
-  @Override
-  public String getGenre() {
-    return genre;
-  }
-
-  @Override
-  public double getRating() {
-    return rating;
-  }
-
-  @Override
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
   public int getEpisodeCount() {
     return episodeCount;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    IMediaItem that = (IMediaItem) o;
-    return id.equals(that.getId());
+  public int getSeasonCount() {
+    return seasonCount;
   }
 
-  @Override
-  public int hashCode() {
-    return id.hashCode();
+  public Map<Integer, Double> getSeasonRatings() {
+    return seasonRatings == null ? null : new HashMap<>(seasonRatings);
   }
 }
