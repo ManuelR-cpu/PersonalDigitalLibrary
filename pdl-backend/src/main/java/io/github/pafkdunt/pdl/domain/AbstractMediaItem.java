@@ -1,4 +1,5 @@
-package Model.domain;
+package io.github.pafkdunt.pdl.domain;
+
 
 import java.util.UUID;
 

@@ -2,20 +2,25 @@ package Controller;
 
 import Model.domain.IMediaItem;
 import Model.domain.MediaType;
-import Model.service.LibraryService;
+
+import Model.domain.Movie;
+import Model.domain.TVShow;
+import Model.domain.api.ApiClient;
 import View.IView;
 import App.Main;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.management.relation.RoleUnresolved;
 
 public class LibraryController implements ControllerInterface {
-  private final LibraryService library;
+  private final ApiClient apiClient;
   private IView view;
   private final Main sceneManager;
 
-  public LibraryController(LibraryService library, Main sceneManager) {
-    this.library = library;
+  public LibraryController(ApiClient apiClient, Main sceneManager) {
+    this.apiClient = apiClient;
     this.sceneManager = sceneManager;
   }
 
@@ -26,12 +31,20 @@ public class LibraryController implements ControllerInterface {
 
   @Override
   public void deleteSelectedItem(UUID selectedItemId, MediaType selectedItemType) {
-    boolean success = library.deleteItem(selectedItemId, selectedItemType);
+    if (selectedItemId == null || selectedItemType == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
+    }
 
-    if (success) {
+    try {
+      if (selectedItemType.equals(MediaType.MOVIE)) {
+        apiClient.deleteMovie(selectedItemId);
+      } else {
+        apiClient.deleteTVShow(selectedItemId);
+      }
+
       view.showMessage("Item deleted successfully.");
       refreshView();
-    } else {
+    } catch (RuntimeException e) {
       view.showMessage("No item with that title was found.");
     }
   }
@@ -39,7 +52,11 @@ public class LibraryController implements ControllerInterface {
   @Override
   public void addNewItem(IMediaItem item) {
     if (item != null) {
-      library.addItem(item);
+      if (item.getMediaType().equals(MediaType.MOVIE)) {
+        apiClient.createMovie((Movie) item);
+      } else {
+        apiClient.createTVShow((TVShow) item);
+      }
       view.showMessage("Item added to library successfully.");
       refreshView();
     } else {
@@ -50,14 +67,18 @@ public class LibraryController implements ControllerInterface {
   @Override
   public void updateItem(UUID uuid, IMediaItem item) {
     if (item != null) {
-      library.modifyItem(uuid, item);
+      if (item.getMediaType().equals(MediaType.MOVIE)) {
+        apiClient.updateMovie((Movie) item);
+      } else {
+        apiClient.updateTVShow((TVShow) item);
+      }
     } else {
       view.showMessage("No item to update.");
     }
   }
 
   private void refreshView() {
-    List<IMediaItem> allItems = library.getAllItems();
+    List<IMediaItem> allItems = apiClient.getAllItems();
     view.showAllItems(allItems);
   }
 
@@ -68,19 +89,21 @@ public class LibraryController implements ControllerInterface {
 
   @Override
   public void requestAllItemsView() {
-    List<IMediaItem> allItems = library.getAllItems();
+    List<IMediaItem> allItems = apiClient.getAllItems();
     sceneManager.showLibraryView(allItems);
   }
 
   @Override
   public void requestMoviesView() {
-    List<IMediaItem> movies = library.getItemsByType(MediaType.MOVIE);
+    List<IMediaItem> movies = new ArrayList<>();
+    movies.addAll(apiClient.getMovies());
     sceneManager.showLibraryView(movies);
   }
 
   @Override
   public void requestTVShowsView() {
-    List<IMediaItem> shows = library.getItemsByType(MediaType.TV_SERIES);
+    List<IMediaItem> shows = new ArrayList<>();
+    shows.addAll(apiClient.getTVShows());
     sceneManager.showLibraryView(shows);
   }
 
@@ -96,7 +119,10 @@ public class LibraryController implements ControllerInterface {
 
   @Override
   public void requestSearch(String title) {
-    List<IMediaItem> results = library.searchForItems(title);
+    List<IMediaItem> results = new ArrayList<>();
+    results.addAll(apiClient.getMoviesByTitle(title));
+    results.addAll(apiClient.getTVShowsByTitle(title));
+
     sceneManager.showLibraryView(results);
     if (results.isEmpty()) {
       view.showMessage("No items found with " + title + ".");

@@ -3,13 +3,11 @@ package App;
 import Controller.ControllerInterface;
 import Controller.LibraryController;
 import Model.domain.IMediaItem;
-import Model.repository.DataSourceFactory;
-import Model.repository.MediaRepository;
-import Model.repository.SqlMediaRepository;
-import Model.service.LibraryService;
-import Model.service.MediaLibraryService;
+import Model.domain.api.ApiClient;
 import View.GraphicalView;
 import View.MainMenuView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.http.HttpClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -25,11 +23,12 @@ public class Main extends Application {
   public void start(Stage primaryStage) throws Exception {
     this.primaryStage = primaryStage;
 
-    var ds = DataSourceFactory.createDataSource();
-    MediaRepository mediaRepository = new SqlMediaRepository(ds);
-    LibraryService myLibrary = new MediaLibraryService(mediaRepository);
+    HttpClient httpClient = HttpClient.newHttpClient();
+    ObjectMapper mapper = new ObjectMapper();
 
-    this.controller = new LibraryController(myLibrary,this);
+    ApiClient apiClient = new ApiClient(httpClient, mapper, "http://localhost:8080");
+
+    this.controller = new LibraryController(apiClient,this);
 
     this.mainMenuView = new MainMenuView(controller);
     this.guiView = new GraphicalView(controller);

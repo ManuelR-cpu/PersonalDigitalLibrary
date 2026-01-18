@@ -1,15 +1,16 @@
-package Model.domain;
+package io.github.pafkdunt.pdl.domain;
 
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
+
 
 public class Movie extends AbstractMediaItem {
   private final String director;
   private final int duration;
 
   // for constructing new Movie objects
-  public Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType, String director, int duration) {
+  public Movie(String title, int releaseYear, String genre, double rating, MediaType mediaType,  String director, int duration) {
     super(title, releaseYear, genre, rating, mediaType);
     this.director = director;
     this.duration = duration;

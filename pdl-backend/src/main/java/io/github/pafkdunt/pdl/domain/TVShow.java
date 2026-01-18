@@ -1,4 +1,4 @@
-package Model.domain;
+package io.github.pafkdunt.pdl.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ public class TVShow extends AbstractMediaItem {
   private Map<Integer, Double> seasonRatings;
 
   // for constructing new Movie objects
-  public TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount, Integer seasonCount) {
+  public TVShow(String title, int releaseYear, String genre, double rating, MediaType mediaType, Integer episodeCount,  Integer seasonCount) {
     super(title, releaseYear, genre, rating,  mediaType);
     this.episodeCount = episodeCount;
     this.seasonCount = seasonCount;
