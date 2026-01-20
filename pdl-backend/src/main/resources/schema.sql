@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS season_rating, tv_show, movie CASCADE;
-
 CREATE TABLE movie (
     id UUID PRIMARY KEY,
     title TEXT NOT NULL,

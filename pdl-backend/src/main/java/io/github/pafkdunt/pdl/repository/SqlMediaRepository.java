@@ -168,7 +168,7 @@ public class SqlMediaRepository implements MediaRepository {
   public List<Movie> findAllMovies() {
     String sqlEntry = """
       SELECT id, title, release_year, genre, rating, director, duration
-      FROM movie;
+      FROM movie
       """;
 
     return jdbc.query(sqlEntry, (rs, rowNum) -> mapMovieRowToItem(rs));
@@ -179,7 +179,7 @@ public class SqlMediaRepository implements MediaRepository {
     List<TVShow> tvShows = new ArrayList<>();
     String tvSqlEntry = """
       SELECT id, title, release_year, genre, rating, episode_count, season_count
-      FROM tv_show;
+      FROM tv_show
       """;
 
     List<TVRow> tvRows = jdbc.query(tvSqlEntry, (rs, rowNum) -> new TVRow(
@@ -227,7 +227,7 @@ public class SqlMediaRepository implements MediaRepository {
       SELECT show_id, season_num, rating
       FROM season_rating
       WHERE show_id IN (:ids)
-      ORDER BY show_id, season_num;
+      ORDER BY show_id, season_num
       """;
 
     // Bind the :ids in the SQL statement to the inputted list of UUIDS.
